@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Serraview/JSHierarchicalSelector.git"
+    "url": "https://github.com/lukemurray/NgHierarchicalSelector"
   },
   "keywords": [
     "tree",
@@ -25,9 +25,9 @@
   "author": "Luke Murray",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Serraview/JSHierarchicalSelector/issues"
+    "url": "https://github.com/lukemurray/NgHierarchicalSelector/issues"
   },
-  "homepage": "https://github.com/Serraview/JSHierarchicalSelector",
+  "homepage": "https://github.com/lukemurray/NgHierarchicalSelector",
   "devDependencies": {
     "del": "^1.0.0",
     "gulp": "^3.8.10",
