@@ -54,5 +54,3 @@ Gulp is used to build the project.
 - `gulp watch` with run 'build' and watch for changes
 
 ## Testing
-
-# License
