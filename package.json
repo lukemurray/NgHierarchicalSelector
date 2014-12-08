@@ -23,7 +23,7 @@
     "angularjs"
   ],
   "author": "Luke Murray",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/Serraview/JSHierarchicalSelector/issues"
   },
