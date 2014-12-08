@@ -6,6 +6,8 @@
 */
 angular.module('hierarchical-selector', [])
 .directive('hierarchicalSelector', function ($compile) {
+  var canSelectItemCallbackSet = false;
+
   return {
     restrict: 'E',
     replace: true,
@@ -19,7 +21,7 @@ angular.module('hierarchical-selector', [])
     },
     link: function(scope, element, attrs) {
       if (attrs.canSelectItem) {
-        scope.useCanSelectItem = true;
+        canSelectItemCallbackSet = true;
       }
     },
     controller: function ($scope, $document, $window) {
@@ -200,7 +202,7 @@ angular.module('hierarchical-selector', [])
         }
       };
       $scope.itemSelected = function(item) {
-        if (($scope.useCanSelectItem && $scope.canSelectItem({item: item}) === false) || ($scope.selectOnlyLeafs && item.children && item.children.length > 0)) {
+        if ((canSelectItemCallbackSet && $scope.canSelectItem({item: item}) === false) || ($scope.selectOnlyLeafs && item.children && item.children.length > 0)) {
           return;
         }
 
@@ -228,6 +230,8 @@ angular.module('hierarchical-selector', [])
 })
 
 .directive('treeItem', function($compile) {
+  var canSelectItemCallbackSet = false;
+
   return {
     restrict: 'E',
     replace: true,
@@ -238,7 +242,8 @@ angular.module('hierarchical-selector', [])
       onActiveItem: '&',
       multiSelect: '=?',
       isActive: '=', // the item is active - means it is highlighted but not selected
-      selectOnlyLeafs: '=?'
+      selectOnlyLeafs: '=?',
+      canSelectItem: '=' // reference from the parent control
     },
     controller: function($scope) {
       $scope.item.isExpanded = false;
@@ -277,6 +282,18 @@ angular.module('hierarchical-selector', [])
           $scope.onActiveItem({item: item});
         }
       };
+
+      $scope.showCheckbox = function() {
+        if (!$scope.multiSelect) {
+          return false;
+        }
+        // it is multi select
+        // canSelectItem callback takes preference
+        if (canSelectItemCallbackSet) {
+          return $scope.canSelectItem({item: $scope.item});
+        }
+        return !$scope.selectOnlyLeafs || ($scope.selectOnlyLeafs && !$scope.item.children.length > 0);
+      };
     },
     /**
     * Manually compiles the element, fixing the recursion loop.
@@ -288,6 +305,9 @@ angular.module('hierarchical-selector', [])
       // Normalize the link parameter
       if(angular.isFunction(link)){
         link = { post: link };
+      }
+      if (attrs.canSelectItem) {
+        canSelectItemCallbackSet = true;
       }
 
       // Break the recursion loop by removing the contents

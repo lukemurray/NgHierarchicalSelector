@@ -32,17 +32,20 @@ angular.module('demo', ['hierarchical-selector'])
   $scope.data3 = angular.copy($scope.data1);
   $scope.data4 = angular.copy($scope.data1);
 
-  $scope.onSelectionChanged = function(items, str) {
-    str = '';
+  $scope.onSelectionChanged = function(items) {
+    var str = '';
     if (items) {
       for (var i = 0; i < items.length; i++) {
         str += items[i].name + ', ';
       }
     }
+    return str;
   };
 
   $scope.selectOnly1Or2 = function(item) {
-    return /[12]/.test(item.name);
+    if (item)
+      return /[12]/.test(item.name);
+    return false;
   };
 })
 
