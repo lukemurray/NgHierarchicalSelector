@@ -3,10 +3,13 @@ Angular hierarchical-selector directive
 
 Hierarchical (or tree) selector for AngularJS. It can either have the whole data structure (a tree) passed to it or set to asynchronously load each level via a callback. It also allows auto-complete searching of the tree, optional multiple selection and kayboard navigation.
 
-Overview
+### Overview
 - Select data from a hierarchical/tree structure
 - Asynchronously or not
 - Includes auto-complete/type-ahead (configurable to hit your service)
+
+### Check it out
+https://github.io/lukemurray/NgHierarchicalSelector/
 
 TODO
 - bugs
@@ -33,10 +36,6 @@ TODO
 
 # Requirements
 - AngularJS 1.3
-
-# Usage
-
-## Options
 
 ## CSS
 .expando - Change the expand marker style

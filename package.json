@@ -27,7 +27,7 @@
   "bugs": {
     "url": "https://github.com/lukemurray/NgHierarchicalSelector/issues"
   },
-  "homepage": "https://github.com/lukemurray/NgHierarchicalSelector",
+  "homepage": "https://github.io/lukemurray/NgHierarchicalSelector",
   "devDependencies": {
     "del": "^1.0.0",
     "gulp": "^3.8.10",
