@@ -22,7 +22,7 @@ TODO
 - tree
   - disable items
   - show selected item(s) (even without checkboxes)
-  - option for no check boxes
+  - option for no check boxes in multi select?
 - async
   - support async for expanding
   - support async for auto complete
