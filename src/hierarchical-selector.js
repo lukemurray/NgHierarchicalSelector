@@ -185,6 +185,7 @@ angular.module('hierarchical-selector', [])
         $event.stopPropagation();
         $scope.selectedItems.splice($scope.selectedItems.indexOf(item), 1);
         closePopup();
+        item.selected = false;
         if ($scope.onSelectionChanged) {
           $scope.onSelectionChanged({items: $scope.selectedItems.length ? $scope.selectedItems : undefined});
         }
@@ -206,13 +207,17 @@ angular.module('hierarchical-selector', [])
 
         if (!$scope.multiSelect) {
           closePopup();
+          for (var i = 0; i < $scope.selectedItems.length; i++) {
+            $scope.selectedItems[i].selected = false;
+          }
+          item.selected = true;
           $scope.selectedItems = [];
           $scope.selectedItems.push(item);
         } else {
-          item.checked = true;
+          item.selected = true;
           var indexOfItem = $scope.selectedItems.indexOf(item);
           if (indexOfItem > -1) {
-            item.checked = false;
+            item.selected = false;
             $scope.selectedItems.splice(indexOfItem, 1);
           } else {
             $scope.selectedItems.push(item);

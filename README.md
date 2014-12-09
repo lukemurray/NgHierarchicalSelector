@@ -21,8 +21,8 @@ TODO
   - drop-down button for tree selection (configurable)
 - tree
   - disable items
-  - show selected item(s) (even without checkboxes)
   - option for no check boxes in multi select?
+  - option for parent select selects all children
 - async
   - support async for expanding
   - support async for auto complete
