@@ -10,7 +10,7 @@ Hierarchical (or tree) selector for AngularJS. It can either have the whole data
 - Keyboard navigation
 
 ### Check it out
-https://github.io/lukemurray/NgHierarchicalSelector/
+http://lukemurray.github.io/NgHierarchicalSelector/
 
 TODO
 - bugs
@@ -19,8 +19,10 @@ TODO
 - input control
   - remove selected items by keyboard
   - drop-down button for tree selection (configurable)
-- extending
+- tree
   - disable items
+  - show selected item(s) (even without checkboxes)
+  - option for no check boxes
 - async
   - support async for expanding
   - support async for auto complete

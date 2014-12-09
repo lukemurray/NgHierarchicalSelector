@@ -6,8 +6,6 @@
 */
 angular.module('hierarchical-selector', [])
 .directive('hierarchicalSelector', function ($compile) {
-  var canSelectItemCallbackSet = false;
-
   return {
     restrict: 'E',
     replace: true,
@@ -21,7 +19,7 @@ angular.module('hierarchical-selector', [])
     },
     link: function(scope, element, attrs) {
       if (attrs.canSelectItem) {
-        canSelectItemCallbackSet = true;
+        scope.useCanSelectItemCallback = true;
       }
     },
     controller: function ($scope, $document, $window) {
@@ -202,7 +200,7 @@ angular.module('hierarchical-selector', [])
         }
       };
       $scope.itemSelected = function(item) {
-        if ((canSelectItemCallbackSet && $scope.canSelectItem({item: item}) === false) || ($scope.selectOnlyLeafs && item.children && item.children.length > 0)) {
+        if (($scope.useCanSelectItemCallback && $scope.canSelectItem({item: item}) === false) || ($scope.selectOnlyLeafs && item.children && item.children.length > 0)) {
           return;
         }
 
@@ -230,8 +228,6 @@ angular.module('hierarchical-selector', [])
 })
 
 .directive('treeItem', function($compile) {
-  var canSelectItemCallbackSet = false;
-
   return {
     restrict: 'E',
     replace: true,
@@ -243,6 +239,7 @@ angular.module('hierarchical-selector', [])
       multiSelect: '=?',
       isActive: '=', // the item is active - means it is highlighted but not selected
       selectOnlyLeafs: '=?',
+      useCanSelectItem: '=',
       canSelectItem: '=' // reference from the parent control
     },
     controller: function($scope) {
@@ -289,10 +286,10 @@ angular.module('hierarchical-selector', [])
         }
         // it is multi select
         // canSelectItem callback takes preference
-        if (canSelectItemCallbackSet) {
+        if ($scope.useCanSelectItem) {
           return $scope.canSelectItem({item: $scope.item});
         }
-        return !$scope.selectOnlyLeafs || ($scope.selectOnlyLeafs && !$scope.item.children.length > 0);
+        return !$scope.selectOnlyLeafs || ($scope.selectOnlyLeafs && $scope.item.children.length === 0);
       };
     },
     /**
@@ -306,9 +303,6 @@ angular.module('hierarchical-selector', [])
       if(angular.isFunction(link)){
         link = { post: link };
       }
-      if (attrs.canSelectItem) {
-        canSelectItemCallbackSet = true;
-      }
 
       // Break the recursion loop by removing the contents
       var contents = element.contents().remove();
@@ -318,7 +312,7 @@ angular.module('hierarchical-selector', [])
         /**
         * Compiles and re-adds the contents
         */
-        post: function(scope, element){
+        post: function(scope, element, attrs){
           // Compile the contents
           if(!compiledContents){
             compiledContents = $compile(contents);

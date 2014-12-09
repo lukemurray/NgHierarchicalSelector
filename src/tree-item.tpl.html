@@ -3,6 +3,6 @@
     <span ng-if="showExpando(item)" class="expando" ng-class="{'expando-opened': item.isExpanded}" ng-click="onExpandoClicked(item, $event)"></span><div class="item-details"><input class="tree-checkbox" type="checkbox" ng-if="showCheckbox()" ng-checked="item.checked" />{{item.name}}</div>
   </div>
   <ul ng-repeat="child in item.children" ng-if="item.isExpanded">
-    <tree-item item="child" item-selected="selectItem(child)" select-only-leafs="selectOnlyLeafs" can-select-item="canSelectItem" multi-select="multiSelect" on-active-item="activeSubItem(item, $event)" />
+    <tree-item item="child" item-selected="selectItem(child)" select-only-leafs="selectOnlyLeafs" use-can-select-item="useCanSelectItem" can-select-item="canSelectItem" multi-select="multiSelect" on-active-item="activeSubItem(item, $event)" />
   </ul>
 </li>
