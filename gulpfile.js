@@ -74,7 +74,7 @@ gulp.task('min-css', function() {
   var version = JSON.parse(fs.readFileSync('./package.json').toString()).version;
   gulp.src(_outputDir + '/*.css')
     .pipe(minifyCSS())
-    .pipe(rename('ng-hierarchical-celector.' + version + '.min.css'))
+    .pipe(rename('ng-hierarchical-selector.' + version + '.min.css'))
     .pipe(gulp.dest(_outputDir));
 });
 
@@ -83,7 +83,7 @@ gulp.task('min', ['min-css'], function() {
   gulp.src(_outputDir + '/*.js')
     .pipe(concat(_outputDir + '/ng-hierarchical-celector.' + version + '.js'))
     .pipe(uglify())
-    .pipe(rename('ng-hierarchical-celector.' + version + '.min.js'))
+    .pipe(rename('ng-hierarchical-selector.' + version + '.min.js'))
     .pipe(gulp.dest(_outputDir));
 });
 
