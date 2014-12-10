@@ -121,6 +121,11 @@ angular.module('hierarchical-selector', [])
       // handle keyboard navigation
       function keyboardNav(e) {
         switch (e.keyCode) {
+          // backspace
+          // case 8: {
+
+            // break;
+          // }
           // ESC closes
           case 27: {
             e.stopPropagation();
@@ -200,6 +205,7 @@ angular.module('hierarchical-selector', [])
           $document.on('keydown', keyboardNav);
         }
       };
+      
       $scope.itemSelected = function(item) {
         if (($scope.useCanSelectItemCallback && $scope.canSelectItem({item: item}) === false) || ($scope.selectOnlyLeafs && item.children && item.children.length > 0)) {
           return;
@@ -266,7 +272,7 @@ angular.module('hierarchical-selector', [])
         }
       };
 
-      $scope.selectItem = function(item, $event) {
+      $scope.subItemSelected = function(item, $event) {
         if ($scope.itemSelected) {
           $scope.itemSelected({item: item});
         }
