@@ -6,8 +6,6 @@
 */
 angular.module('hierarchical-selector', [])
 .directive('hierarchicalSelector', function ($compile) {
-  var canSelectItemCallbackSet = false;
-
   return {
     restrict: 'E',
     replace: true,
@@ -21,7 +19,7 @@ angular.module('hierarchical-selector', [])
     },
     link: function(scope, element, attrs) {
       if (attrs.canSelectItem) {
-        canSelectItemCallbackSet = true;
+        scope.useCanSelectItemCallback = true;
       }
     },
     controller: function ($scope, $document, $window) {
@@ -123,6 +121,11 @@ angular.module('hierarchical-selector', [])
       // handle keyboard navigation
       function keyboardNav(e) {
         switch (e.keyCode) {
+          // backspace
+          // case 8: {
+
+            // break;
+          // }
           // ESC closes
           case 27: {
             e.stopPropagation();
@@ -187,6 +190,7 @@ angular.module('hierarchical-selector', [])
         $event.stopPropagation();
         $scope.selectedItems.splice($scope.selectedItems.indexOf(item), 1);
         closePopup();
+        item.selected = false;
         if ($scope.onSelectionChanged) {
           $scope.onSelectionChanged({items: $scope.selectedItems.length ? $scope.selectedItems : undefined});
         }
@@ -201,20 +205,25 @@ angular.module('hierarchical-selector', [])
           $document.on('keydown', keyboardNav);
         }
       };
+      
       $scope.itemSelected = function(item) {
-        if ((canSelectItemCallbackSet && $scope.canSelectItem({item: item}) === false) || ($scope.selectOnlyLeafs && item.children && item.children.length > 0)) {
+        if (($scope.useCanSelectItemCallback && $scope.canSelectItem({item: item}) === false) || ($scope.selectOnlyLeafs && item.children && item.children.length > 0)) {
           return;
         }
 
         if (!$scope.multiSelect) {
           closePopup();
+          for (var i = 0; i < $scope.selectedItems.length; i++) {
+            $scope.selectedItems[i].selected = false;
+          }
+          item.selected = true;
           $scope.selectedItems = [];
           $scope.selectedItems.push(item);
         } else {
-          item.checked = true;
+          item.selected = true;
           var indexOfItem = $scope.selectedItems.indexOf(item);
           if (indexOfItem > -1) {
-            item.checked = false;
+            item.selected = false;
             $scope.selectedItems.splice(indexOfItem, 1);
           } else {
             $scope.selectedItems.push(item);
@@ -230,8 +239,6 @@ angular.module('hierarchical-selector', [])
 })
 
 .directive('treeItem', function($compile) {
-  var canSelectItemCallbackSet = false;
-
   return {
     restrict: 'E',
     replace: true,
@@ -243,6 +250,7 @@ angular.module('hierarchical-selector', [])
       multiSelect: '=?',
       isActive: '=', // the item is active - means it is highlighted but not selected
       selectOnlyLeafs: '=?',
+      useCanSelectItem: '=',
       canSelectItem: '=' // reference from the parent control
     },
     controller: function($scope) {
@@ -264,7 +272,7 @@ angular.module('hierarchical-selector', [])
         }
       };
 
-      $scope.selectItem = function(item, $event) {
+      $scope.subItemSelected = function(item, $event) {
         if ($scope.itemSelected) {
           $scope.itemSelected({item: item});
         }
@@ -289,10 +297,10 @@ angular.module('hierarchical-selector', [])
         }
         // it is multi select
         // canSelectItem callback takes preference
-        if (canSelectItemCallbackSet) {
+        if ($scope.useCanSelectItem) {
           return $scope.canSelectItem({item: $scope.item});
         }
-        return !$scope.selectOnlyLeafs || ($scope.selectOnlyLeafs && !$scope.item.children.length > 0);
+        return !$scope.selectOnlyLeafs || ($scope.selectOnlyLeafs && $scope.item.children.length === 0);
       };
     },
     /**
@@ -306,9 +314,6 @@ angular.module('hierarchical-selector', [])
       if(angular.isFunction(link)){
         link = { post: link };
       }
-      if (attrs.canSelectItem) {
-        canSelectItemCallbackSet = true;
-      }
 
       // Break the recursion loop by removing the contents
       var contents = element.contents().remove();
@@ -318,7 +323,7 @@ angular.module('hierarchical-selector', [])
         /**
         * Compiles and re-adds the contents
         */
-        post: function(scope, element){
+        post: function(scope, element, attrs){
           // Compile the contents
           if(!compiledContents){
             compiledContents = $compile(contents);

@@ -42,7 +42,7 @@
   border-radius: 4px;
   overflow: auto;
   z-index: 500;
-  padding: 10px;
+  padding: 10px 5px;
   cursor: default;
 }
 .hierarchical-control .tree-view ul {
@@ -58,9 +58,29 @@
   margin-top: 0;
 }
 .hierarchical-control .tree-view .active {
-  background-color: #f3f3f3;
+  background-color: #f2f2f2;
+  border-radius: 3px;
 }
-.hierarchical-control .tree-view .expando {
+.hierarchical-control .tree-view .selected.active {
+  background-color: #46b8da;
+}
+.hierarchical-control .tree-view .item-container {
+  padding: 1px 10px;
+  margin-top: 1px;
+  margin-bottom: 1px;
+}
+.hierarchical-control .tree-view .selected {
+  padding: 0px 10px;
+  background: #5bc0de;
+  color: #fff;
+  border: 1px solid #46b8da;
+  border-radius: 3px;
+}
+.hierarchical-control .tree-view li {
+  list-style-type: none;
+  margin-left: 15px;
+}
+.hierarchical-control .tree-view li .expando {
   display: inline-block;
   width: 0;
   height: 0;
@@ -68,15 +88,11 @@
   border-bottom: 6px solid transparent;
   border-left: 10px solid #525252;
 }
-.hierarchical-control .tree-view .expando-opened {
+.hierarchical-control .tree-view li .expando-opened {
   border: none;
   border-left: 6px solid transparent;
   border-right: 6px solid transparent;
   border-top: 10px solid #525252;
-}
-.hierarchical-control .tree-view li {
-  list-style-type: none;
-  margin-left: 15px;
 }
 .hierarchical-control .tree-view li.top-level {
   margin: 0;
