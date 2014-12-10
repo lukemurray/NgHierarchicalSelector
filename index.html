@@ -8,12 +8,11 @@
     <title>Hierarchical/Tree control for AngularJS</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/0.0.1/prism.min.css">
-    <script id="angularScript" src="https://cdnjs.cloudflare.com/ajax/libs/prism/0.0.1/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/0.0.1/prism.min.js"></script>
     <script id="angularScript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.5/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.5/angular-animate.min.js"></script>
-    <link rel="stylesheet" href="./build/hierarchical-selector.css">
-    <script src="./build/hierarchical-selector.js"></script>
-    <script src="./build/hierarchical-selector.templates.js"></script>
+    <link rel="stylesheet" href="./hierarchical-selector.0.1.0.min.css">
+    <script src="./hierarchical-selector.0.1.0.min.js"></script>
     <script src="demo.js"></script>
     <style>
       code[class*=language-], pre[class*=language-] {
@@ -28,18 +27,22 @@
         <h1>Hierarchical/Tree Control</h1>
         <h2>for AngularJS</h2>
         <p>A hierarchical/tree selection control for AngularJS. It can either have the whole data structure (a tree) passed to it or set to asynchronously load each level via a callback. It also allows auto-complete searching of the tree, optional multiple selection and kayboard navigation.</p>
-        <a class="btn btn-large btn-primary" href="http://lukemurray.github.io/NgHierarchicalSelector/">View on GitHub</a>
+        <a class="btn btn-lg btn-primary" href="https://github.com/lukemurray/NgHierarchicalSelector/">View on GitHub</a>
       </div>
     </div>
     <div class="container">
       <div class="row">
-        <h2>Simple Usage</h2>
+        <h2>Getting started</h2>
         <div class="col-md-6">
           <hierarchical-selector data="data1" on-selection-changed="selectedItem1 = items"></hierarchical-selector>
           <br />Selected item: {{selectedItem1}}
         </div>
         <div class="col-md-6">
-          <pre><code class="language-markup">&lt;hierarchical-selector data="data" on-selection-changed="selectedItem = items" /&gt;</code></pre>
+          <pre><code class="language-markup">&lt;!-- Include AngularJS (we'll skip this in futher examples) --&gt;
+&lt;script id="angularScript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.5/angular.min.js"&gt;&lt;/script&gt;
+
+&lt;!-- Somewhere on your page --&gt;
+&lt;hierarchical-selector data="data" on-selection-changed="selectedItem = items" /&gt;</code></pre>
         </div>
       </div>
 
@@ -56,8 +59,8 @@
 
       <div class="row">
         <h2>Multi-select leaf selection only</h2>
-        <p>Also works in single selection mode</p>
         <div class="col-md-6">
+          <p>Also works in single selection mode</p>
           <hierarchical-selector data="data3" select-only-leafs="true" multi-select="true" on-selection-changed="selectedItem3 = onSelectionChanged(items)"></hierarchical-selector>
           <br />Selected items: {{selectedItem3}}
         </div>
@@ -68,8 +71,8 @@
 
       <div class="row">
         <h2>Can select item callback</h2>
-        <p>For custom logic of if an item should be selectable. Takes preference over <code>select-only-leafs</code></p>
         <div class="col-md-6">
+          <p>For custom logic of if an item should be selectable. Takes preference over <code>select-only-leafs</code></p>
           <hierarchical-selector data="data4" can-select-item="selectOnly1Or2(item)" multi-select="true" on-selection-changed="selectedItem4 = onSelectionChanged(items)"></hierarchical-selector>
           <br />Selected items: {{selectedItem4}}
         </div>
