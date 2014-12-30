@@ -9,11 +9,13 @@ var concat = require('gulp-concat');
 var rename = require("gulp-rename");
 var jshint = require('gulp-jshint');
 var bump = require('gulp-bump');
+var ngAnnotate = require('gulp-ng-annotate');
 var templateCache = require('gulp-angular-templatecache');
 var del = require('del');
 var karma = require('karma').server;
 
 var _outputDir = 'build';
+var _releaseDir = 'release';
 var _htmlWatchPaths = ['src/**/*.html'];
 var _jsAppWatchPaths = ['src/**/*.js'];
 var _lessAppWatchPaths = ['src/**/*.less'];
@@ -73,26 +75,37 @@ gulp.task('bump-patch', function(){
 
 gulp.task('min-css', function() {
   var version = JSON.parse(fs.readFileSync('./package.json').toString()).version;
-  gulp.src(_outputDir + '/*.css')
+  gulp.src(_releaseDir + '/ng-hierarchical-selector.' + version + '.css')
     .pipe(minifyCSS())
     .pipe(rename('ng-hierarchical-selector.' + version + '.min.css'))
-    .pipe(gulp.dest(_outputDir));
+    .pipe(gulp.dest(_releaseDir));
+});
+
+gulp.task('copy-rel', function() {
+  var version = JSON.parse(fs.readFileSync('./package.json').toString()).version;
+  gulp.src(_outputDir + '/hierarchical-selector.css')
+    .pipe(rename('ng-hierarchical-selector.' + version + '.css'))
+    .pipe(gulp.dest(_releaseDir));
+  gulp.src(_outputDir + '/*.js')
+  // concat the module and template JS
+    .pipe(concat(_releaseDir + '/ng-hierarchical-selector.' + version + '.js'))
+    .pipe(gulp.dest('./'));
 });
 
 gulp.task('min', ['min-css'], function() {
   var version = JSON.parse(fs.readFileSync('./package.json').toString()).version;
-  gulp.src(_outputDir + '/*.js')
-    .pipe(concat(_outputDir + '/ng-hierarchical-selector.' + version + '.js'))
+  gulp.src(_releaseDir + '/ng-hierarchical-selector.' + version + '.js')
+    .pipe(ngAnnotate({add: true, single_quotes: true}))
     .pipe(uglify())
     .pipe(rename('ng-hierarchical-selector.' + version + '.min.js'))
-    .pipe(gulp.dest(_outputDir));
+    .pipe(gulp.dest(_releaseDir));
 });
 
 // Build the client and server
 gulp.task('default', ['clean', 'build'])
 
-gulp.task('release-minor', ['bump-minor', 'build', 'min', 'min-css']);
-gulp.task('release-patch', ['bump-patch', 'build', 'min', 'min-css']);
+gulp.task('release-minor', ['bump-minor', 'build', 'min']);
+gulp.task('release-patch', ['bump-patch', 'build', 'min']);
 
 // Build the client and server and start the server
 gulp.task('watch', ['build'], function() {
@@ -102,5 +115,5 @@ gulp.task('watch', ['build'], function() {
 });
 
 gulp.task('clean', function(cb) {
-  del([_outputDir], cb);
+  del([_outputDir, _releaseDir], cb);
 });
