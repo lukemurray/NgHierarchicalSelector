@@ -12,6 +12,12 @@ Hierarchical (or tree) selector for AngularJS. It can either have the whole data
 ### Check it out
 http://lukemurray.github.io/NgHierarchicalSelector/
 
+### Release notes
+
+v0.1.1
+  - Prevent keyboard navigation from scrolling the page
+
+### TODO
 v0.2
 - bugs
   - multi-select, lots of tags multi line
@@ -20,10 +26,14 @@ v0.2
 - Docs
   - configuration
   - customisation
+- Chore
+  - set up some repeatable way to do a release
+  - add download links to the release files from page
+  - add to bower
+v0.3
 - async
   - support async for expanding
   - support async for auto complete
-v0.3
 - input control
   - drop-down button for tree selection (configurable)  
 - tree
