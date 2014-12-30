@@ -55,7 +55,8 @@ Do it.
 ## Building
 Gulp is used to build the project.
 - `gulp build` will build is for local development
-- `gulp release` will bump the version and build a release version
+- `gulp release-patch` will bump the version and build a release version
+- `gulp release-minor` will bump the version and build a release version
 - `gulp watch` with run 'build' and watch for changes
 
 ## Testing

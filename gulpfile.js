@@ -20,8 +20,9 @@ var _lessAppWatchPaths = ['src/**/*.less'];
 var _tplAppWatchPaths = ['src/**/*.tpl.html'];
 
 gulp.task('js', function() {
-  gulp.src('src/hierarchical-selector.js')
-  .pipe(gulp.dest(_outputDir))
+  gulp.src('src/*.js')
+  .pipe(concat(_outputDir + '/ng-hierarchical-selector.js'))
+  .pipe(gulp.dest('./'))
   .pipe(jshint())
   .pipe(jshint.reporter('default'));
 });
@@ -37,7 +38,7 @@ gulp.task('less', function() {
 
 gulp.task('templates', function () {
   gulp.src('src/**/*.tpl.html')
-  .pipe(templateCache('hierarchical-selector.templates.js', {module: 'hierarchical-selector'}))
+  .pipe(templateCache('ng-hierarchical-selector.templates.js', {module: 'hierarchical-selector'}))
   .pipe(gulp.dest(_outputDir));
 });
 
@@ -81,7 +82,7 @@ gulp.task('min-css', function() {
 gulp.task('min', ['min-css'], function() {
   var version = JSON.parse(fs.readFileSync('./package.json').toString()).version;
   gulp.src(_outputDir + '/*.js')
-    .pipe(concat(_outputDir + '/ng-hierarchical-celector.' + version + '.js'))
+    .pipe(concat(_outputDir + '/ng-hierarchical-selector.' + version + '.js'))
     .pipe(uglify())
     .pipe(rename('ng-hierarchical-selector.' + version + '.min.js'))
     .pipe(gulp.dest(_outputDir));
@@ -89,6 +90,9 @@ gulp.task('min', ['min-css'], function() {
 
 // Build the client and server
 gulp.task('default', ['clean', 'build'])
+
+gulp.task('release-minor', ['bump-minor', 'build', 'min', 'min-css']);
+gulp.task('release-patch', ['bump-patch', 'build', 'min', 'min-css']);
 
 // Build the client and server and start the server
 gulp.task('watch', ['build'], function() {
