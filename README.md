@@ -28,7 +28,6 @@ v0.2
   - customisation
 - chore
   - set up some repeatable way to do a release
-  - add download links to the release files from page
   - add to bower
 v0.3
 - async
