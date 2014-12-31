@@ -5,23 +5,52 @@
 * Allows auto-complete searching of the tree, optional multiple selection
 */
 angular.module('hierarchical-selector', [
-  'hierarchical-selector.tree-item'
+  'hierarchical-selector.tree-item',
+  'hierarchical-selector.selectorUtils'
 ])
-.directive('hierarchicalSelector', function ($compile) {
+.directive('hierarchicalSelector', function ($compile, selectorUtils) {
   return {
     restrict: 'E',
     replace: true,
     templateUrl: 'hierarchical-selector.tpl.html',
     scope: {
-      data: '=',
+      syncData: '=data',
       multiSelect: '=?',
       onSelectionChanged: '&',
       selectOnlyLeafs: '=?',
-      canSelectItem: '&'
+      canSelectItem: '&',
+      loadChildItems: '&',
+      itemHasChildren: '&'
     },
     link: function(scope, element, attrs) {
+      // is there a better way to know the callbacks are actually set. So we have make decisions on what to use
       if (attrs.canSelectItem) {
         scope.useCanSelectItemCallback = true;
+      }
+      if (attrs.loadChildItems) {
+        scope.isAsync = true;
+      }
+
+      // init async
+      // if we have no data and have the callback
+      if (!scope.syncData && scope.isAsync) {
+        scope.data = [];
+        var items = scope.loadChildItems({parent: null});
+        if (angular.isArray(items)) {
+          scope.data = items;
+        }
+        else {
+          items.then(function(data) {
+            scope.data = data;
+          });
+        }
+      }
+
+      if (scope.syncData) {
+        scope.data = scope.syncData;
+        scope.$watch('syncData', function() {
+          scope.data = scope.syncData;
+        });
       }
     },
     controller: function ($scope, $document, $window) {
@@ -30,6 +59,8 @@ angular.module('hierarchical-selector', [
       $scope.showTree = false;
       $scope.selectedItems = [];
       $scope.multiSelect = $scope.multiSelect || false;
+      // we need somewhere to hold the async loaded children to reference them in navigation etc.
+      $scope.asyncChildCache = {};
 
       function docClickHide(e) {
         closePopup();
@@ -39,22 +70,29 @@ angular.module('hierarchical-selector', [
       function closePopup() {
         $scope.showTree = false;
         if (activeItem) {
-          activeItem.isActive = false;
+          var itemMeta = selectorUtils.getMetaData(activeItem);
+          itemMeta.isActive = false;
           activeItem = undefined;
         }
+        // clear cache
+        $scope.asyncChildCache = {};
         $document.off('click', docClickHide);
         $document.off('keydown', keyboardNav);
       }
 
       function findItemOwnerAndParent(item, array, parentArray, parentIndex) {
+        if (!array) {
+          // we don't know where we are, find the array that we belong to
+          return;
+        }
         var itemIndex = array.indexOf(item);
         if (itemIndex > -1) {
           return {currentArray: array, parentArray: parentArray, parentIndex: parentIndex, itemIndex: itemIndex };
         }
         var newArray;
         for (var i = 0; i < array.length; i++) {
-          if (array[i].children && array[i].children.length > 0) {
-            newArray = findItemOwnerAndParent(item, array[i].children, array, i);
+          if (selectorUtils.hasChildren(array[i], $scope.isAsync)) {
+            newArray = findItemOwnerAndParent(item, selectorUtils.getChildren(array[i], $scope.isAsync, $scope.asyncChildCache), array, i);
             if (newArray) {
               break;
             }
@@ -64,8 +102,9 @@ angular.module('hierarchical-selector', [
       }
 
       function findLowestExpandedItem(item) {
-        var c = item.children[item.children.length -1];
-        if (c.isExpanded) {
+        var children = selectorUtils.getChildren(item, $scope.isAsync, $scope.asyncChildCache);
+        var c = children[children.length -1];
+        if (selectorUtils.getMetaData(c).isExpanded) {
           return findLowestExpandedItem(c);
         }
         return c;
@@ -76,11 +115,12 @@ angular.module('hierarchical-selector', [
        */
       function getNextItem(down, item, array) {
         var itemData = findItemOwnerAndParent(item, array);
+        var itemMeta = selectorUtils.getMetaData(item);
 
         if (down) {
-          if (item.isExpanded) {
+          if (itemMeta.isExpanded) {
             // go down the branch
-            return item.children[0];
+            return selectorUtils.getChildren(item, $scope.isAsync, $scope.asyncChildCache)[0];
           }
           if (itemData.itemIndex < itemData.currentArray.length -1) {
             // next item at this level
@@ -90,11 +130,12 @@ angular.module('hierarchical-selector', [
             // Next item up a level
             return itemData.parentArray[itemData.parentIndex +1];
           }
-        } else {
+        }
+        else {
           if (itemData.itemIndex > 0) {
             // previous item at this level
             var previousAtSameLevel = itemData.currentArray[itemData.itemIndex -1];
-            if (previousAtSameLevel.isExpanded) {
+            if (selectorUtils.getMetaData(previousAtSameLevel).isExpanded) {
               // find the lowest item
               return findLowestExpandedItem(previousAtSameLevel);
             }
@@ -166,7 +207,7 @@ angular.module('hierarchical-selector', [
             e.preventDefault();
             e.stopPropagation();
             if (activeItem) {
-              activeItem.isExpanded = false;
+              selectorUtils.getMetaData(activeItem).isExpanded = false;
               $scope.$apply();
             }
             break;
@@ -176,7 +217,7 @@ angular.module('hierarchical-selector', [
             e.preventDefault();
             e.stopPropagation();
             if (activeItem) {
-              activeItem.isExpanded = true;
+              selectorUtils.getMetaData(activeItem).isExpanded = true;
               $scope.$apply();
             }
             break;
@@ -187,10 +228,12 @@ angular.module('hierarchical-selector', [
       $scope.onActiveItem = function(item) {
         if (activeItem != item) {
           if (activeItem) {
-            activeItem.isActive = false;
+            var itemMeta = selectorUtils.getMetaData(activeItem);
+            itemMeta.isActive = false;
           }
           activeItem = item;
-          activeItem.isActive = true;
+          var itemMeta2 = selectorUtils.getMetaData(activeItem);
+          itemMeta2.isActive = true;
         }
       };
 
@@ -198,7 +241,8 @@ angular.module('hierarchical-selector', [
         $event.stopPropagation();
         $scope.selectedItems.splice($scope.selectedItems.indexOf(item), 1);
         closePopup();
-        item.selected = false;
+        var itemMeta = selectorUtils.getMetaData(item);
+        itemMeta.selected = false;
         if ($scope.onSelectionChanged) {
           $scope.onSelectionChanged({items: $scope.selectedItems.length ? $scope.selectedItems : undefined});
         }
@@ -215,23 +259,24 @@ angular.module('hierarchical-selector', [
       };
 
       $scope.itemSelected = function(item) {
-        if (($scope.useCanSelectItemCallback && $scope.canSelectItem({item: item}) === false) || ($scope.selectOnlyLeafs && item.children && item.children.length > 0)) {
+        if (($scope.useCanSelectItemCallback && $scope.canSelectItem({item: item}) === false) || ($scope.selectOnlyLeafs && selectorUtils.hasChildren(item, $scope.isAsync))) {
           return;
         }
-
+        var itemMeta = selectorUtils.getMetaData(item);
         if (!$scope.multiSelect) {
           closePopup();
           for (var i = 0; i < $scope.selectedItems.length; i++) {
-            $scope.selectedItems[i].selected = false;
+            selectorUtils.getMetaData($scope.selectedItems[i]).selected = false;
           }
-          item.selected = true;
+
+          itemMeta.selected = true;
           $scope.selectedItems = [];
           $scope.selectedItems.push(item);
         } else {
-          item.selected = true;
+          itemMeta.selected = true;
           var indexOfItem = $scope.selectedItems.indexOf(item);
           if (indexOfItem > -1) {
-            item.selected = false;
+            itemMeta.selected = false;
             $scope.selectedItems.splice(indexOfItem, 1);
           } else {
             $scope.selectedItems.push(item);

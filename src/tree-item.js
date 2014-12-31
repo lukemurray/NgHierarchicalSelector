@@ -1,11 +1,10 @@
 /**
-* Generic hierarchical/tree selection control. It can either have the whole data structure
-* or asynchronously load each level.
-*
-* Allows auto-complete searching of the tree, optional multiple selection
+* The recursive tree item used in the hierarchical/tree selector control
 */
-angular.module('hierarchical-selector.tree-item', [])
-.directive('treeItem', function($compile) {
+angular.module('hierarchical-selector.tree-item', [
+  'hierarchical-selector.selectorUtils'
+])
+.directive('treeItem', function($compile, $q, selectorUtils) {
   return {
     restrict: 'E',
     replace: true,
@@ -18,18 +17,42 @@ angular.module('hierarchical-selector.tree-item', [])
       isActive: '=', // the item is active - means it is highlighted but not selected
       selectOnlyLeafs: '=?',
       useCanSelectItem: '=',
-      canSelectItem: '=' // reference from the parent control
+      canSelectItem: '=', // reference from the parent control
+      loadChildItems: '=', // reference from parent
+      itemHasChildren: '&',
+      async: '=',
+      asyncChildCache: '='
     },
     controller: function($scope) {
-      $scope.item.isExpanded = false;
+      $scope.metaData = selectorUtils.getMetaData($scope.item);
+      $scope.metaData.isExpanded = false;
+
+      // get the next layer before they expand so things seem speedy
+      if ($scope.async) {
+        if (angular.isFunction($scope.loadChildItems) && $scope.item) {
+          var items = $scope.loadChildItems({parent: $scope.item});
+          if (angular.isArray(items)) {
+            $scope.theChildren = items;
+          }
+          items.then(function(data) {
+            $scope.theChildren = data;
+            // cache the children
+            $scope.asyncChildCache[$scope.item.$$hashKey] = data;
+          });
+        }
+      }
+      else {
+        $scope.theChildren = $scope.item.children;
+      }
 
       $scope.showExpando = function(item) {
-        return item.children && item.children.length > 0;
+        return selectorUtils.hasChildren(item, $scope.async);
       };
 
       $scope.onExpandoClicked = function(item, $event) {
         $event.stopPropagation();
-        item.isExpanded = !item.isExpanded;
+        var meta = selectorUtils.getMetaData(item);
+        meta.isExpanded = !meta.isExpanded;
       };
 
       $scope.clickSelectItem = function(item, $event) {
@@ -51,10 +74,10 @@ angular.module('hierarchical-selector.tree-item', [])
         }
       };
 
-      $scope.onMouseOver = function(item, $event) {
+      $scope.onMouseOver = function($event) {
         $event.stopPropagation();
-        if ($scope.onActiveItem) {
-          $scope.onActiveItem({item: item});
+        if (angular.isFunction($scope.onActiveItem)) {
+          $scope.onActiveItem({item: $scope.item});
         }
       };
 
@@ -67,7 +90,7 @@ angular.module('hierarchical-selector.tree-item', [])
         if ($scope.useCanSelectItem) {
           return $scope.canSelectItem({item: $scope.item});
         }
-        return !$scope.selectOnlyLeafs || ($scope.selectOnlyLeafs && $scope.item.children.length === 0);
+        return !$scope.selectOnlyLeafs || ($scope.selectOnlyLeafs && !selectorUtils.hasChildren($scope.item, $scope.async));
       };
     },
     /**
@@ -78,7 +101,7 @@ angular.module('hierarchical-selector.tree-item', [])
     */
     compile: function(element, attrs, link) {
       // Normalize the link parameter
-      if(angular.isFunction(link)){
+      if(angular.isFunction(link)) {
         link = { post: link };
       }
 
@@ -101,7 +124,7 @@ angular.module('hierarchical-selector.tree-item', [])
           });
 
           // Call the post-linking function, if any
-          if(link && link.post){
+          if (link && link.post) {
             link.post.apply(null, arguments);
           }
         }

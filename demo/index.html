@@ -92,6 +92,63 @@
           <pre><code class="language-markup">&lt;hierarchical-selector data="data" can-select-item="selectOnly1Or2(item)" multi-select="true" on-selection-changed="onSelectionChanged(items)" /&gt;</code></pre>
         </div>
       </div>
+
+      <div class="row">
+        <h2>Async tree building</h2>
+        <div class="col-md-6">
+          <p>Setting the <code>load-child-items</code> callback will change the control to async mode. Allowing you to load the child data for each node on demand. The calls for children are made when the parent of those children are visable; before you expand the node for speedy user interaction.</p>
+          Data model required for async items:
+          <pre><code class="language-javascript">{
+  name: "string",
+  hasChildren: true|false // used to figure out how to display the item. item-has-children attribute takes preference.
+}</code></pre>
+          <br />
+          <hierarchical-selector load-child-items="loadAsyncData(parent)" on-selection-changed="selectedItem5 = onSelectionChanged(items)"></hierarchical-selector>
+          <br />Selected items: {{selectedItem5}}
+        </div>
+        <div class="col-md-6">
+          <pre><code class="language-javascript">// Needs to return an array of items or a promise that resolves to an array of items.
+$scope.loadAsyncData = function(parent) {
+  var defer = $q.defer();
+  if (!parent) {
+    $http.get('http://jsonplaceholder.typicode.com/users').success(function (data) {
+      for (var i = 2; i < data.length; i++) {
+        data[i].hasChildren = true;
+      }
+      defer.resolve(data);
+    });
+  }
+  else {
+    if (parent.username) {
+      // second level
+      $http.get('http://jsonplaceholder.typicode.com/users/' + parent.id + '/posts').success(function (data) {
+        // make our 'model'
+        for (var i = 0; i < data.length; i++) {
+          data[i].name = 'Post: ' + data[i].title;
+          if (i === 0) {
+            data[i].hasChildren = true;
+          }
+        }
+        defer.resolve(data);
+      });
+    }
+    else if (parent.title) {
+      // third level
+      $http.get('http://jsonplaceholder.typicode.com/posts/' + parent.id + '/comments').success(function (data) {
+        // make our 'model'
+        for (var i = 0; i < data.length; i++) {
+          data[i].name = 'Comment: ' + data[i].name;
+        }
+        defer.resolve(data);
+      });
+    }
+  }
+  return defer.promise;
+};</code></pre>
+          <br />
+          <pre><code class="language-markup">&lt;hierarchical-selector load-child-nodes="loadAsynData" on-selection-changed="selectedItem5 = onSelectionChanged(items)" /&gt;</code></pre>
+        </div>
+      </div>
     </div>
     <br />
   </body>

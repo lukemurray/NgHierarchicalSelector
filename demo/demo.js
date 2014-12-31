@@ -1,6 +1,6 @@
 angular.module('demo', ['hierarchical-selector'])
 
-.controller('DemoCtrl', function($scope) {
+.controller('DemoCtrl', function($scope, $http, $q) {
   $scope.data1 = [];
 
   for (var i = 0; i < 7; i++) {
@@ -46,6 +46,45 @@ angular.module('demo', ['hierarchical-selector'])
     if (item)
       return /[12]/.test(item.name);
     return false;
+  };
+
+  // Needs to return an array of items or a promise that resolves to an array of items.
+  $scope.loadAsyncData = function(parent) {
+    var defer = $q.defer();
+    if (!parent) {
+      $http.get('http://jsonplaceholder.typicode.com/users').success(function (data) {
+        for (var i = 2; i < data.length; i++) {
+          data[i].hasChildren = true;
+        }
+        defer.resolve(data);
+      });
+    }
+    else {
+      if (parent.username) {
+        // second level
+        $http.get('http://jsonplaceholder.typicode.com/users/' + parent.id + '/posts').success(function (data) {
+          // make our 'model'
+          for (var i = 0; i < data.length; i++) {
+            data[i].name = 'Post: ' + data[i].title;
+            if (i === 0) {
+              data[i].hasChildren = true;
+            }
+          }
+          defer.resolve(data);
+        });
+      }
+      else if (parent.title) {
+        // third level
+        $http.get('http://jsonplaceholder.typicode.com/posts/' + parent.id + '/comments').success(function (data) {
+          // make our 'model'
+          for (var i = 0; i < data.length; i++) {
+            data[i].name = 'Comment: ' + data[i].name;
+          }
+          defer.resolve(data);
+        });
+      }
+    }
+    return defer.promise;
   };
 })
 

@@ -13,12 +13,14 @@ Hierarchical (or tree) selector for AngularJS. It can either have the whole data
 http://lukemurray.github.io/NgNierarchicalSelector/
 
 ### Release notes
+v0.2
+  - Async support for loading items in the tree. See load-child-items attribute
 
 v0.1.1
   - Prevent keyboard navigation from scrolling the page
 
 ### TODO
-v0.2
+v0.3
 - bugs
   - multi-select, lots of tags multi line
 - Tests
@@ -26,28 +28,33 @@ v0.2
 - Docs
   - configuration
   - customisation
-- chore
+- general
   - set up some repeatable way to do a release
   - add to bower
-v0.3
+  - set up CI for the project
 - async
-  - support async for expanding
-  - support async for auto complete
+  - show loading indicator if it takes awhile (hasn't loaded before they expand)
 - input control
   - drop-down button for tree selection (configurable)  
 - tree
   - option for parent select selects all children
+
 v0.4
-- autocomplete
+- autocomplete typing
   - allow typing at the end of the selected items
   - auto complete list for typing
   - no typing at the end if item selected and not multi select
+  - support async for auto complete
 - input control
   - remove selected items by keyboard
+
 v0.5
 - tree
   - disabled items
   - option for no check boxes in multi select?
+  - keyboard, left on a chile node should make the parent the active node
+- popup
+  - better positioning of popup when at bottom/edges etc.
 
 # Requirements
 - AngularJS 1.3
