@@ -13,6 +13,7 @@ var ngAnnotate = require('gulp-ng-annotate');
 var templateCache = require('gulp-angular-templatecache');
 var del = require('del');
 var karma = require('karma').server;
+var runSequence = require('run-sequence');
 
 var _outputDir = 'build';
 var _releaseDir = 'release';
@@ -102,10 +103,16 @@ gulp.task('min', ['min-css'], function() {
 });
 
 // Build the client and server
-gulp.task('default', ['clean', 'build'])
+gulp.task('default', function(callback) {
+  runSequence('clean', 'build', callback);
+})
 
-gulp.task('release-minor', ['bump-minor', 'build', 'min']);
-gulp.task('release-patch', ['bump-patch', 'build', 'min']);
+gulp.task('release-minor', function(callback) {
+  runSequence('bump-minor', 'build', 'copy-rel', 'min', callback);
+});
+gulp.task('release-patch', function(callback) {
+  runSequence('bump-patch', 'build', 'copy-rel', 'min', callback);
+});
 
 // Build the client and server and start the server
 gulp.task('watch', ['build'], function() {
