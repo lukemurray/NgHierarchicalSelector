@@ -55,11 +55,12 @@
       <div class="row">
         <h2>Multi-select</h2>
         <div class="col-md-6">
-          <hierarchical-selector data="data2" multi-select="true" on-selection-changed="selectedItem2 = onSelectionChanged(items)"></hierarchical-selector>
+          <p>Also without a button to show the tree</p>
+          <hierarchical-selector data="data2" multi-select="true" on-selection-changed="selectedItem2 = onSelectionChanged(items)" no-button></hierarchical-selector>
           <br />Selected items: {{selectedItem2}}
         </div>
         <div class="col-md-6">
-          <pre><code class="language-markup">&lt;hierarchical-selector data="data" multi-select="true" on-selection-changed="onSelectionChanged(items)" /&gt;</code></pre>
+          <pre><code class="language-markup">&lt;hierarchical-selector data="data" multi-select="true" on-selection-changed="onSelectionChanged(items)" no-button /&gt;</code></pre>
         </div>
       </div>
 

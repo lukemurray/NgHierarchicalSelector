@@ -53,7 +53,7 @@ angular.module('demo', ['hierarchical-selector'])
     var defer = $q.defer();
     if (!parent) {
       $http.get('http://jsonplaceholder.typicode.com/users').success(function (data) {
-        for (var i = 2; i < data.length; i++) {
+        for (var i = 1; i < data.length -1; i++) {
           data[i].hasChildren = true;
         }
         defer.resolve(data);
@@ -66,7 +66,7 @@ angular.module('demo', ['hierarchical-selector'])
           // make our 'model'
           for (var i = 0; i < data.length; i++) {
             data[i].name = 'Post: ' + data[i].title;
-            if (i === 0) {
+            if (i < 4) {
               data[i].hasChildren = true;
             }
           }

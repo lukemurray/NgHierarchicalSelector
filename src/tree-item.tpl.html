@@ -3,6 +3,7 @@
     <span ng-if="showExpando(item)" class="expando" ng-class="{'expando-opened': metaData.isExpanded}" ng-click="onExpandoClicked(item, $event)"></span><div class="item-details"><input class="tree-checkbox" type="checkbox" ng-if="showCheckbox()" ng-checked="metaData.selected" />{{item.name}}</div>
   </div>
   <ul ng-repeat="child in theChildren" ng-if="metaData.isExpanded">
-    <tree-item item="child" item-selected="subItemSelected(item)" select-only-leafs="selectOnlyLeafs" use-can-select-item="useCanSelectItem" can-select-item="canSelectItem" multi-select="multiSelect" on-active-item="activeSubItem(item, $event)" load-child-items="loadChildItems" async="async" async-child-cache="asyncChildCache" />
+    <div ng-if="child.placeholder" class="loading">Loading...</div>
+    <tree-item ng-if="!child.placeholder" item="child" item-selected="subItemSelected(item)" select-only-leafs="selectOnlyLeafs" use-can-select-item="useCanSelectItem" can-select-item="canSelectItem" multi-select="multiSelect" on-active-item="activeSubItem(item, $event)" load-child-items="loadChildItems" async="async" async-child-cache="asyncChildCache" />
   </ul>
 </li>

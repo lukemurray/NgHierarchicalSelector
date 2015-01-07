@@ -13,6 +13,10 @@ Hierarchical (or tree) selector for AngularJS. It can either have the whole data
 http://lukemurray.github.io/NgNierarchicalSelector/
 
 ### Release notes
+v0.3
+  - Add in feedback about the async children loading
+  - Default button to show the tree on the right side of control. Use no-button attribute to hide it
+
 v0.2
   - Async support for loading items in the tree. See load-child-items attribute
 
@@ -26,16 +30,11 @@ v0.3
 - Tests
   - yep, should be writing these
 - Docs
-  - configuration
   - customisation
 - general
   - set up some repeatable way to do a release
   - add to bower
   - set up CI for the project
-- async
-  - show loading indicator if it takes awhile (hasn't loaded before they expand)
-- input control
-  - drop-down button for tree selection (configurable)  
 - tree
   - option for parent select selects all children
 

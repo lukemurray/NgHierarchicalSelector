@@ -27,23 +27,7 @@ angular.module('hierarchical-selector.tree-item', [
       $scope.metaData = selectorUtils.getMetaData($scope.item);
       $scope.metaData.isExpanded = false;
 
-      // get the next layer before they expand so things seem speedy
-      if ($scope.async) {
-        if (angular.isFunction($scope.loadChildItems) && $scope.item) {
-          var items = $scope.loadChildItems({parent: $scope.item});
-          if (angular.isArray(items)) {
-            $scope.theChildren = items;
-          }
-          items.then(function(data) {
-            $scope.theChildren = data;
-            // cache the children
-            $scope.asyncChildCache[$scope.item.$$hashKey] = data;
-          });
-        }
-      }
-      else {
-        $scope.theChildren = $scope.item.children;
-      }
+      $scope.theChildren = $scope.item.children;
 
       $scope.showExpando = function(item) {
         return selectorUtils.hasChildren(item, $scope.async);
@@ -126,6 +110,31 @@ angular.module('hierarchical-selector.tree-item', [
           // Call the post-linking function, if any
           if (link && link.post) {
             link.post.apply(null, arguments);
+          }
+
+          // when someone expands a node fetch data if needed
+          if (scope.async) {
+            scope.$watch('item.' + selectorUtils.getMetaPath() + '.isExpanded', function(newVal) {
+              if (!newVal) {
+                return;
+              }
+              if (scope.asyncChildCache[scope.item.$$hashKey]) {
+                return scope.asyncChildCache[scope.item.$$hashKey];
+              }
+
+              scope.theChildren = [{placeholder: true}];
+              if (angular.isFunction(scope.loadChildItems) && scope.item) {
+                var items = scope.loadChildItems({parent: scope.item});
+                if (angular.isArray(items)) {
+                  scope.theChildren = items;
+                }
+                items.then(function(data) {
+                  scope.theChildren = data;
+                  // cache the children
+                  scope.asyncChildCache[scope.item.$$hashKey] = data;
+                });
+              }
+            });
           }
         }
       };

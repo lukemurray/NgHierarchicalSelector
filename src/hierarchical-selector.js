@@ -30,6 +30,9 @@ angular.module('hierarchical-selector', [
       if (attrs.loadChildItems) {
         scope.isAsync = true;
       }
+      if (attrs.noButton === undefined) {
+        scope.showButton = true;
+      }
 
       // init async
       // if we have no data and have the callback
@@ -245,6 +248,15 @@ angular.module('hierarchical-selector', [
         itemMeta.selected = false;
         if ($scope.onSelectionChanged) {
           $scope.onSelectionChanged({items: $scope.selectedItems.length ? $scope.selectedItems : undefined});
+        }
+      };
+
+      $scope.onButtonClicked = function($event) {
+        if ($scope.showTree) {
+          closePopup();
+        }
+        else {
+          $scope.onControlClicked($event);
         }
       };
 

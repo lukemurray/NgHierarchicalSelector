@@ -4,6 +4,10 @@
 angular.module('hierarchical-selector.selectorUtils', [])
 .factory('selectorUtils', function($q) {
   return {
+    getMetaPath: function() {
+      return '_hsmeta'; // change below if you change this
+    },
+
     getMetaData: function(item) {
       // we store some meta data on the object - maybe we shouldn't but it is easy now
       // they should be passing us a 'view-model' anyway as we require a few fields (children, name, hasChildren)
