@@ -14,7 +14,7 @@ http://lukemurray.github.io/NgNierarchicalSelector/
 
 ### Release notes
 v0.3
-  - Add in feedback about the async children loading
+  - Added in feedback about the async children loading
   - Default button to show the tree on the right side of control. Use no-button attribute to hide it
 
 v0.2
@@ -24,7 +24,7 @@ v0.1.1
   - Prevent keyboard navigation from scrolling the page
 
 ### TODO
-v0.3
+v0.4
 - bugs
   - multi-select, lots of tags multi line
 - Tests
@@ -37,8 +37,10 @@ v0.3
   - set up CI for the project
 - tree
   - option for parent select selects all children
+- selection
+  - A way to customise the text in the select pill
 
-v0.4
+v0.5
 - autocomplete typing
   - allow typing at the end of the selected items
   - auto complete list for typing
@@ -47,7 +49,7 @@ v0.4
 - input control
   - remove selected items by keyboard
 
-v0.5
+v0.6
 - tree
   - disabled items
   - option for no check boxes in multi select?
