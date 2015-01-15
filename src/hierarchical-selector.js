@@ -35,6 +35,9 @@ angular.module('hierarchical-selector', [
       if (attrs.noButton === undefined) {
         scope.showButton = true;
       }
+      if (attrs.tagName) {
+        scope.useTagName = true;
+      }
 
       // init async
       // if we have no data and have the callback
