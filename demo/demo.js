@@ -12,9 +12,10 @@ angular.module('demo', ['hierarchical-selector'])
 
     for (var j = 0; j < 3; j++) {
       var obj2 = {
-        id: j,
+        id: i + '.' + j,
         name: 'Node ' + i + '.' + j,
-        children: []
+        children: [],
+		parents: [i]
       };
       obj.children.push(obj2);
     }
@@ -23,21 +24,31 @@ angular.module('demo', ['hierarchical-selector'])
   }
 
   $scope.data1[1].children[0].children.push({
-    id: j,
+    id: '1.0.1',
     name: 'Node sub_sub 1',
-    children: []
+    children: [],
+	parents: [1, '1.1']
   });
 
   $scope.data2 = angular.copy($scope.data1);
   $scope.data3 = angular.copy($scope.data1);
   $scope.data4 = angular.copy($scope.data1);
+  $scope.data5 = angular.copy($scope.data1);
+  $scope.data6 = angular.copy($scope.data5);
+  
+  $scope.copySelection = function copySelection(items) {
+	return angular.copy(items);
+  }
 
   $scope.onSelectionChanged = function(items) {
     var str = '';
     if (items) {
+	  itemNames = [];
       for (var i = 0; i < items.length; i++) {
-        str += items[i].name + ', ';
+        itemNames.push(items[i].name);
       }
+	  
+      str = itemNames.join(', ');
     }
     return str;
   };

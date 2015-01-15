@@ -20,7 +20,9 @@ angular.module('hierarchical-selector', [
       selectOnlyLeafs: '=?',
       canSelectItem: '&',
       loadChildItems: '&',
-      itemHasChildren: '&'
+      itemHasChildren: '&',
+	  selection: '=',
+      tagName: '&'
     },
     link: function(scope, element, attrs) {
       // is there a better way to know the callbacks are actually set. So we have make decisions on what to use
@@ -56,7 +58,7 @@ angular.module('hierarchical-selector', [
         });
       }
     },
-    controller: function ($scope, $document, $window) {
+    controller: function ($scope, $document, $window, $interpolate) {
       var activeItem;
 
       $scope.showTree = false;
@@ -298,6 +300,27 @@ angular.module('hierarchical-selector', [
         if ($scope.onSelectionChanged) {
           $scope.onSelectionChanged({items: $scope.selectedItems.length ? $scope.selectedItems : undefined});
         }
+      };
+  
+      $scope.$watch('selection', 
+		  function(newValue, oldValue) {
+			  if (newValue) {
+				if (angular.isArray(newValue)) {
+					for (var i = 0; i < newValue.length; i++) {
+						$scope.itemSelected(newValue[i]);
+					}
+				}
+				else {
+					$scope.itemSelected(newValue);
+				}
+			  }
+		  });
+		  
+      $scope.getTagName = function(i) {
+        if ($scope.useTagName) {
+           return $scope.tagName({ item: i });
+        }
+		return i.name;
       };
     }
   };
