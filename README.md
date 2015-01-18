@@ -13,6 +13,10 @@ Hierarchical (or tree) selector for AngularJS. It can either have the whole data
 http://lukemurray.github.io/NgNierarchicalSelector/
 
 ### Release notes
+v0.3.1
+  - Added in call back to get the tag name
+  - Ability to set the initial selected item.
+  
 v0.3
   - Added in feedback about the async children loading
   - Default button to show the tree on the right side of control. Use no-button attribute to hide it
@@ -70,10 +74,10 @@ v0.6
 Do it.
 
 ## Building
-Gulp is used to build the project.
+Gulp is used to build the project ('npm install' will install the gulp dependencies).
 - `gulp build` will build is for local development
-- `gulp release-patch` will bump the version and build a release version
-- `gulp release-minor` will bump the version and build a release version
+- `gulp rel-patch` will bump the version and build a release version
+- `gulp rel-minor` will bump the version and build a release version
 - `gulp watch` with run 'build' and watch for changes
 
 ## Testing
