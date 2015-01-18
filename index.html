@@ -11,8 +11,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/0.0.1/prism.min.js"></script>
     <script id="angularScript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.5/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.5/angular-animate.min.js"></script>
-    <link rel="stylesheet" href="./ng-hierarchical-selector.0.3.0.min.css">
-    <script src="./ng-hierarchical-selector.0.3.0.min.js"></script>
+    <link rel="stylesheet" href="./ng-hierarchical-selector.0.3.1.min.css">
+    <script src="./ng-hierarchical-selector.0.3.1.min.js"></script>
     <script src="demo.js"></script>
     <style>
       code[class*=language-], pre[class*=language-] {
@@ -48,6 +48,21 @@
 
 &lt;!-- Somewhere on your page --&gt;
 &lt;hierarchical-selector data="data" on-selection-changed="selectedItem = items" /&gt;</code></pre>
+        </div>
+      </div>
+
+
+	  <div class="row">
+        <h2>Manually setting the selected items</h2>
+        <div class="col-md-6">
+          <hierarchical-selector data="data5" on-selection-changed="$scope.selection = copySelection(items)"></hierarchical-selector>
+          <br /><p>Selected items: {{$scope.selection ? $scope.selection[0].name : 'null'}}</p>
+		  <hierarchical-selector data="data6" selection="$scope.selection" on-selection-changed="selectedItem6 = items"></hierarchical-selector>
+		  <br /><p>Selected items: {{selectedItem6 ? selectedItem6[0].name : 'null'}}</p>
+        </div>
+        <div class="col-md-6">
+          <pre><code class="language-markup">&lt;hierarchical-selector data="data" on-selection-changed="selected = onSelectionChanged(items)" /&gt;
+&lt;hierarchical-selector data="data" selection="&#123 &#123selected&#125&#125)" /&gt;</code></pre>
         </div>
       </div>
 
