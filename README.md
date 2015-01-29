@@ -34,8 +34,6 @@ v0.3
   - set up CI for the project
 - tree
   - option for parent select selects all children
-- selection
-  - A way to customise the text in the select pill
 - autocomplete typing
   - allow typing at the end of the selected items
   - auto complete list for typing
@@ -57,8 +55,6 @@ v0.3
 .expando - Change the expand marker style
 .expando-opened - Change the colapse marker style
 
-## ng-required directive
-
 # Contributing
 Please do it.
 
@@ -70,3 +66,4 @@ Gulp is used to build the project ('npm install' will install the gulp dependenc
 - `gulp watch` with run 'build' and watch for changes
 
 ## Testing
+...
