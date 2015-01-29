@@ -12,6 +12,9 @@ Hierarchical (or tree) selector for AngularJS. It can either have the whole data
 http://lukemurray.github.io/NgNierarchicalSelector/
 
 ### Release notes
+v0.3.2
+  - Fix an issue with when the selection attribute is null/undefined
+
 v0.3.1
   - Added in call back to get the tag name
   - Ability to set the initial selected item.

@@ -81,10 +81,10 @@
         <div class="col-md-5 demo-area">
           <h2>Setting the selected items</h2>
           <p><code>selection</code> - An array of objects that respresent the selected items</p>
-          <hierarchical-selector data="data5" on-selection-changed="$scope.selection = copySelection(items)"></hierarchical-selector>
+          <hierarchical-selector data="data5" on-selection-changed="selection = items"></hierarchical-selector>
           <br />
-          <p>Selected items: {{$scope.selection ? $scope.selection[0].name : 'null'}}</p>
-	        <hierarchical-selector data="data6" selection="$scope.selection" on-selection-changed="selectedItem6 = items"></hierarchical-selector>
+          <p>Selected items: {{selection ? selection[0].name : 'null'}}</p>
+	        <hierarchical-selector data="data6" selection="selection" on-selection-changed="selectedItem6 = items"></hierarchical-selector>
           <br />
           <p>Selected items: {{selectedItem6 ? selectedItem6[0].name : 'null'}}</p>
         </div>

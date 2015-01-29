@@ -66,10 +66,6 @@ angular.module('demo', ['hierarchical-selector'])
   $scope.data5 = angular.copy($scope.data1);
   $scope.data6 = angular.copy($scope.data5);
 
-  $scope.copySelection = function copySelection(items) {
-	return angular.copy(items);
-  }
-
   $scope.onSelectionChanged = function(items) {
     var str = '';
     if (items) {

@@ -120,7 +120,7 @@ gulp.task('default', function(callback) {
 gulp.task('rel-minor', ['clean', 'bump-minor'], function(callback) {
   runSequence(['js', 'less', 'templates'], 'min', callback);
 });
-gulp.task('rel-patch', ['clean', 'bump-minor'], function(callback) {
+gulp.task('rel-patch', ['clean', 'bump-patch'], function(callback) {
   runSequence(['js', 'less', 'templates'], 'min', callback);
 });
 
