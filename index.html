@@ -6,28 +6,49 @@
     <meta name="Description"
     content="Hierarchical/Tree control for AngularJS">
     <title>Hierarchical/Tree control for AngularJS</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/0.0.1/prism.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/0.0.1/prism.min.js"></script>
-    <script id="angularScript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.5/angular.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.5/angular-animate.min.js"></script>
-    <link rel="stylesheet" href="./ng-hierarchical-selector.0.3.0.min.css">
-    <script src="./ng-hierarchical-selector.0.3.0.min.js"></script>
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <link rel="stylesheet" href="prism.css">
+    <script src="prism.js"></script>
+    <script id="angularScript" src="angular.min.js"></script>
+    <script src="angular-animate.min.js"></script>
+    <link rel="stylesheet" href="ng-hierarchical-selector.0.3.2.min.css">
+    <script src="ng-hierarchical-selector.0.3.2.min.js"></script>
     <script src="demo.js"></script>
     <style>
       code[class*=language-], pre[class*=language-] {
         margin: 0;
       }
 
+      .container-fluid {
+        margin-left: 13%;
+        margin-right: 13%;
+      }
+
       a.link {
         padding-left: 15px;
+      }
+
+      .code {
+        padding-bottom: 25px;
+        padding-top:53px;
+      }
+
+      .limit-height {
+        height: 300px;
+        overflow-y: scroll;
+        display:block;
+      }
+
+      .demo-area {
+        padding: 0;
+        padding-right: 40px;
       }
     </style>
   </head>
   <body ng-controller="DemoCtrl">
 
     <div class="jumbotron">
-      <div class="container">
+      <div class="container-fluid">
         <h1>Hierarchical/Tree Control</h1>
         <h2>for AngularJS</h2>
         <p>A hierarchical/tree selection control for AngularJS. It can either have the whole data structure (a tree) passed to it or set to asynchronously load each level via a callback. It also allows auto-complete searching of the tree, optional multiple selection and kayboard navigation.</p>
@@ -35,14 +56,17 @@
         <a class="link" href="https://github.com/lukemurray/NgHierarchicalSelector/releases">Latest Release</a>
       </div>
     </div>
-    <div class="container">
+
+    <div class="container-fluid">
       <div class="row">
-        <h2>Getting started</h2>
-        <div class="col-md-6">
+        <div class="col-lg-5 demo-area">
+          <h2>Getting started</h2>
+          <p><code>data</code> - An array of objects that respresent the tree structure</p>
+          <p><code>on-selection-changed</code> - Executed when the selected item changes</p>
           <hierarchical-selector data="data1" on-selection-changed="selectedItem1 = items"></hierarchical-selector>
           <br />Selected item: {{selectedItem1}}
         </div>
-        <div class="col-md-6">
+        <div class="col-lg-7 code">
           <pre><code class="language-markup">&lt;!-- Include AngularJS (we'll skip this in futher examples) --&gt;
 &lt;script id="angularScript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.5/angular.min.js"&gt;&lt;/script&gt;
 
@@ -51,63 +75,93 @@
         </div>
       </div>
 
-      <div class="row">
-        <h2>Multi-select</h2>
-        <div class="col-md-6">
-          <p>Also without a button to show the tree</p>
-          <hierarchical-selector data="data2" multi-select="true" on-selection-changed="selectedItem2 = onSelectionChanged(items)" no-button></hierarchical-selector>
-          <br />Selected items: {{selectedItem2}}
+
+	  <div class="row">
+        <div class="col-md-5 demo-area">
+          <h2>Setting the selected items</h2>
+          <p><code>selection</code> - An array of objects that respresent the selected items</p>
+          <hierarchical-selector data="data5" on-selection-changed="selection = items"></hierarchical-selector>
+          <br />
+          <p>Selected items: {{selection ? selection[0].name : 'null'}}</p>
+	        <hierarchical-selector data="data6" selection="selection" on-selection-changed="selectedItem6 = items"></hierarchical-selector>
+          <br />
+          <p>Selected items: {{selectedItem6 ? selectedItem6[0].name : 'null'}}</p>
         </div>
-        <div class="col-md-6">
-          <pre><code class="language-markup">&lt;hierarchical-selector data="data" multi-select="true" on-selection-changed="onSelectionChanged(items)" no-button /&gt;</code></pre>
+        <div class="col-md-7 code">
+          <pre><code class="language-markup">&lt;!-- Set store the selected item from the first control --&gt;
+&lt;hierarchical-selector data="data" on-selection-changed="selection = items" /&gt;
+
+&lt;!-- Set the selection in the second control --&gt;
+&lt;hierarchical-selector data="data" selection="{ {selection }}" /&gt;</code></pre>
         </div>
       </div>
 
       <div class="row">
-        <h2>Multi-select leaf selection only</h2>
-        <div class="col-md-6">
-          <p>Also works in single selection mode</p>
+        <div class="col-lg-5 demo-area">
+          <h2>Multi-select</h2>
+          <p>Also without the button to show/hide the tree pop-down.
+          <p><code>multi-select</code> - Enables mult-selection mode. Items will have checkboxes on their left</p>
+          <p><code>no-button</code> - Hides the button on the right</p>
+          <hierarchical-selector id="muli-select" data="data2" multi-select="true" on-selection-changed="selectedItem2 = onSelectionChanged(items)" no-button></hierarchical-selector>
+          <br />Selected items: {{selectedItem2}}
+        </div>
+        <div class="col-lg-7 code">
+          <pre><code class="language-markup">&lt;!-- Turn on multi-select and turn of the button --&gt;
+&lt;hierarchical-selector data="data" multi-select="true" on-selection-changed="onSelectionChanged(items)" no-button /&gt;</code></pre>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-5 demo-area">
+          <h2>Multi-select leaf selection only</h2>
+          <p>Also works in single selection mode.</p>
+          <p><code>select-only-leafs</code> - Only nodes that have no children are selectable</p>
           <hierarchical-selector data="data3" select-only-leafs="true" multi-select="true" on-selection-changed="selectedItem3 = onSelectionChanged(items)"></hierarchical-selector>
           <br />Selected items: {{selectedItem3}}
         </div>
-        <div class="col-md-6">
-          <pre><code class="language-markup">&lt;hierarchical-selector data="data" select-only-leafs="true" multi-select="true" on-selection-changed="onSelectionChanged(items)" /&gt;</code></pre>
+        <div class="col-lg-7 code">
+          <pre><code class="language-markup">&lt;!-- Turn on multi-select and limit selection to leaf nodes only --&gt;
+&lt;hierarchical-selector data="data" select-only-leafs="true" multi-select="true" on-selection-changed="onSelectionChanged(items)" /&gt;</code></pre>
         </div>
       </div>
 
       <div class="row">
-        <h2>Can select item callback</h2>
-        <div class="col-md-6">
-          <p>For custom logic of if an item should be selectable. Takes preference over <code>select-only-leafs</code></p>
+        <div class="col-lg-5 demo-area">
+          <h2>Can select item callback</h2>
+          <p>For custom logic of if an item should be selectable.</p>
+          <p><code>can-select-item</code> - If supplied, executed to figure out if an item can be selected. Takes preference over <code>select-only-leafs</code></p>
           <hierarchical-selector data="data4" can-select-item="selectOnly1Or2(item)" multi-select="true" on-selection-changed="selectedItem4 = onSelectionChanged(items)"></hierarchical-selector>
           <br />Selected items: {{selectedItem4}}
         </div>
-        <div class="col-md-6">
-          <pre><code class="language-javascript">$scope.selectOnly1Or2 = function(item) {
+        <div class="col-lg-7 code">
+          <pre><code class="language-javascript">// On your controller - return true if we allow the user to select this node
+$scope.selectOnly1Or2 = function(item) {
   if (item)
     return /[12]/.test(item.name);
   return false;
-};</code></pre>
-          <br />
-          <pre><code class="language-markup">&lt;hierarchical-selector data="data" can-select-item="selectOnly1Or2(item)" multi-select="true" on-selection-changed="onSelectionChanged(items)" /&gt;</code></pre>
+};</code>
+
+<code class="language-markup">&lt;!-- Pass our can-select-item function --&gt;
+&lt;hierarchical-selector data="data" can-select-item="selectOnly1Or2(item)" multi-select="true" on-selection-changed="onSelectionChanged(items)" /&gt;</code></pre>
         </div>
       </div>
 
       <div class="row">
-        <h2>Async tree building</h2>
-        <div class="col-md-6">
-          <p>Setting the <code>load-child-items</code> callback will change the control to async mode. Allowing you to load the child data for each node on demand. The calls for children are made when the parent of those children are visable; before you expand the node for speedy user interaction.</p>
+        <div class="col-lg-5 demo-area">
+          <h2>Async tree building</h2>
+          <p>Setting the <code>load-child-items</code> callback will change the control to async mode.</p>
+          <p><code>load-child-items</code> - Executed to load the child items when the user expands a node. <code>data</code> can be used to set the top level itesm but is ignored after that. The function should return an array of items or a promise that resolved to an array of items</p>
           Data model required for async items:
           <pre><code class="language-javascript">{
   name: "string",
-  hasChildren: true|false // used to figure out how to display the item. item-has-children attribute takes preference.
+  hasChildren: true|false // item-has-children attribute takes preference.
 }</code></pre>
           <br />
           <hierarchical-selector load-child-items="loadAsyncData(parent)" on-selection-changed="selectedItem5 = onSelectionChanged(items)"></hierarchical-selector>
           <br />Selected items: {{selectedItem5}}
         </div>
-        <div class="col-md-6">
-          <pre><code class="language-javascript">// Needs to return an array of items or a promise that resolves to an array of items.
+        <div class="col-lg-7 code">
+          <pre><code class="language-javascript limit-height">// Needs to return an array of items or a promise that resolves to an array of items.
 $scope.loadAsyncData = function(parent) {
   var defer = $q.defer();
   if (!parent) {
@@ -144,12 +198,12 @@ $scope.loadAsyncData = function(parent) {
     }
   }
   return defer.promise;
-};</code></pre>
-          <br />
-          <pre><code class="language-markup">&lt;hierarchical-selector load-child-nodes="loadAsynData" on-selection-changed="selectedItem5 = onSelectionChanged(items)" /&gt;</code></pre>
+};</code>
+
+<code class="language-markup">&lt;!-- Pass our function to load-child-nodes --&gt;
+&lt;hierarchical-selector load-child-nodes="loadAsynData" on-selection-changed="selectedItem5 = onSelectionChanged(items)" /&gt;</code></pre>
         </div>
       </div>
     </div>
-    <br />
   </body>
 </html>

@@ -1,29 +1,61 @@
 angular.module('demo', ['hierarchical-selector'])
 
 .controller('DemoCtrl', function($scope, $http, $q) {
-  $scope.data1 = [];
-
-  for (var i = 0; i < 7; i++) {
-    var obj = {
-      id: i,
-      name: 'Node ' + i,
-      children: []
-    };
-
-    for (var j = 0; j < 3; j++) {
-      var obj2 = {
-        id: j,
-        name: 'Node ' + i + '.' + j,
-        children: []
-      };
-      obj.children.push(obj2);
-    }
-
-    $scope.data1.push(obj);
-  }
+  $scope.data1 = [
+    {id: 0, name: 'Australia', children: [
+      {id: 0, name: 'Melbourne', children: []},
+      {id: 0, name: 'Sydney', children: []},
+      {id: 0, name: 'Kambalda', children: []}
+    ]},
+    {id: 1, name: 'Spain', children: [
+      {id: 0, name: 'Barcelona', children: []},
+      {id: 0, name: 'Madrid', children: []},
+      {id: 0, name: 'Benahavis', children: []}
+    ]},
+    {id: 2, name: 'Peru', children: [
+      {id: 0, name: 'Cusco', children: []},
+      {id: 0, name: 'Lima', children: []},
+      {id: 0, name: 'Huacachina', children: []}
+    ]},
+    {id: 3, name: 'UK', children: [
+      {id: 0, name: 'London', children: []},
+      {id: 0, name: 'Leeds', children: []},
+      {id: 0, name: 'Manchester', children: []}
+    ]},
+    {id: 4, name: 'USA', children: [
+      {id: 0, name: 'San Francisco', children: []},
+      {id: 0, name: 'New York', children: []},
+      {id: 0, name: 'San Diego', children: []}
+    ]},
+    {id: 5, name: 'East Africa', children: [
+      {id: 0, name: 'Kenya', children: []},
+      {id: 0, name: 'Rwanda', children: []},
+      {id: 0, name: 'Tanzania', children: []}
+    ]},
+    {id: 6, name: 'Japan', children: [
+      {id: 0, name: 'Tokyo', children: []},
+      {id: 0, name: 'Osaka', children: []},
+      {id: 0, name: 'Hiroshima', children: []}
+    ]},
+    {id: 7, name: 'Germany', children: [
+      {id: 0, name: 'Berlin', children: []},
+      {id: 0, name: 'Munich', children: []},
+      {id: 0, name: 'Frankfurt', children: []}
+    ]},
+  ];
 
   $scope.data1[1].children[0].children.push({
-    id: j,
+    id: 99,
+    name: 'Node sub_sub 1',
+    children: []
+  });
+  $scope.data1[1].children[1].children.push({
+    id: 100,
+    name: 'Node sub_sub 1',
+    children: []
+  });
+  $scope.data1[0].children[0].children.push({
+    id: 101,
     name: 'Node sub_sub 1',
     children: []
   });
@@ -31,13 +63,18 @@ angular.module('demo', ['hierarchical-selector'])
   $scope.data2 = angular.copy($scope.data1);
   $scope.data3 = angular.copy($scope.data1);
   $scope.data4 = angular.copy($scope.data1);
+  $scope.data5 = angular.copy($scope.data1);
+  $scope.data6 = angular.copy($scope.data5);
 
   $scope.onSelectionChanged = function(items) {
     var str = '';
     if (items) {
+	  itemNames = [];
       for (var i = 0; i < items.length; i++) {
-        str += items[i].name + ', ';
+        itemNames.push(items[i].name);
       }
+
+      str = itemNames.join(', ');
     }
     return str;
   };
