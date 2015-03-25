@@ -9,7 +9,7 @@ Hierarchical (or tree) selector for AngularJS. It can either have the whole data
 - Keyboard navigation
 
 ### Check it out
-http://lukemurray.github.io/NgNierarchicalSelector/
+http://lukemurray.github.io/NgHierarchicalSelector/
 
 ### Release notes
 v0.3.2
