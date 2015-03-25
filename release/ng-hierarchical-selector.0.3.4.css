@@ -1,14 +1,20 @@
 .hierarchical-control .hierarchical-input {
   cursor: text;
   width: auto;
+  height: auto;
+  min-height: 34px;
+  padding-top: 5px;
+  padding-bottom: 3px;
 }
 .hierarchical-control .hierarchical-input span.selected-items .selected-item {
   background: #5bc0de;
   color: #fff;
-  padding: 2px 0 2px 8px;
+  padding: 0 0 0 8px;
   border: 1px solid #46b8da;
   border-radius: 3px;
   margin-right: 3px;
+  display: inline-block;
+  margin-bottom: 2px;
 }
 .hierarchical-control .hierarchical-input span.selected-items .selected-item-close {
   width: 20px;

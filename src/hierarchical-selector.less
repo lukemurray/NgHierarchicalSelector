@@ -10,15 +10,21 @@
   .hierarchical-input {
     cursor: text;
     width: auto;
+    height: auto;
+    min-height: 34px;
+    padding-top: 5px;
+    padding-bottom: 3px;
 
     span.selected-items {
       .selected-item {
         background: @selectedItemBackground;
         color: #fff;
-        padding: 2px 0 2px 8px;
+        padding: 0 0 0 8px;
         border: 1px solid @selectedItemBorderColor;
         border-radius: 3px;
         margin-right: 3px;
+        display: inline-block;
+        margin-bottom: 2px;
       }
 
       .selected-item-close {
