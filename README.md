@@ -12,6 +12,9 @@ Hierarchical (or tree) selector for AngularJS. It can either have the whole data
 http://lukemurray.github.io/NgHierarchicalSelector/
 
 ### Release notes
+v0.3.3
+  - Fix a post back issue for ASP.NET on some browsers
+
 v0.3.2
   - Fix an issue with when the selection attribute is null/undefined
 
@@ -53,7 +56,7 @@ v0.3
 
 ## CSS
 .expando - Change the expand marker style
-.expando-opened - Change the colapse marker style
+.expando-opened - Change the collapse marker style
 
 # Contributing
 Please do it.
