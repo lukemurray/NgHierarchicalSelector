@@ -1,3 +1,7 @@
+.hierarchical-control .placeholder {
+  font-style: italic;
+  color: #bbb;
+}
 .hierarchical-control .hierarchical-input {
   cursor: text;
   width: auto;
