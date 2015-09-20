@@ -22,7 +22,8 @@ angular.module('hierarchical-selector', [
       loadChildItems: '&',
       itemHasChildren: '&',
 	    selection: '=',
-      tagName: '&'
+      tagName: '&',
+      placeholder: '@'
     },
     link: function(scope, element, attrs) {
       // is there a better way to know the callbacks are actually set. So we have make decisions on what to use
