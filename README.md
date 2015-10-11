@@ -12,6 +12,9 @@ Hierarchical (or tree) selector for AngularJS. It can either have the whole data
 http://lukemurray.github.io/NgHierarchicalSelector/
 
 ### Release notes
+v0.4.0
+  - Added placeholder text functionality
+
 v0.3.4
   - Fix issue with input control not expanding with many selected items
 
