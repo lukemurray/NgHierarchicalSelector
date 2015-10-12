@@ -314,17 +314,17 @@ angular.module('hierarchical-selector', [
       };
 
       $scope.$watch('selection', function(newValue, oldValue) {
-          if (newValue && newValue != oldValue) {
-  	        if (angular.isArray(newValue)) {
-  		        for (var i = 0; i < newValue.length; i++) {
-  			        $scope.itemSelected(angular.copy(newValue[i]));
-  		        }
-  	        }
-  	        else {
-  		        $scope.itemSelected(angular.copy(newValue));
-  	        }
-	    }
-	    else if (newValue != oldvlaue) { // only clear if it is changing/don't trigger a onSelectionChanged
+        if (newValue) {
+	        if (angular.isArray(newValue)) {
+		        for (var i = 0; i < newValue.length; i++) {
+			        $scope.itemSelected(angular.copy(newValue[i]));
+		        }
+	        }
+	        else {
+		        $scope.itemSelected(angular.copy(newValue));
+	        }
+	      }
+	      else if ($scope.selectedItems.length > 0) { // only clear if it is changing/don't trigger a onSelectionChanged
           $scope.clearSelection();
         }
 	  });
