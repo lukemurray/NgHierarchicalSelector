@@ -74,6 +74,9 @@
   border-right: 7px solid transparent;
   border-top: 7px solid #ffffff;
 }
+.hierarchical-control div.fixedPos {
+  position: fixed;
+}
 .hierarchical-control .tree-view {
   position: absolute;
   max-height: 300px;
