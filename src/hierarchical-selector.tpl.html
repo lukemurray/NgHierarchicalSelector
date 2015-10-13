@@ -9,7 +9,7 @@
       <!-- <input type="text" class="blend-in" /> -->
     </div>
   </div>
-  <div class="tree-view" ng-show="showTree">
+  <div class="tree-view" ng-show="showTree" ng-class="{fixedPos: showTree}">
     <ul>
       <tree-item class="top-level" ng-repeat="item in data" item="item" select-only-leafs="selectOnlyLeafs" use-can-select-item="useCanSelectItemCallback" can-select-item="canSelectItem" multi-select="multiSelect" item-selected="itemSelected(item)" on-active-item="onActiveItem(item)" load-child-items="loadChildItems" async="isAsync" item-has-children="hasChildren(parent)" async-child-cache="asyncChildCache" />
     </ul>
