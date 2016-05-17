@@ -8,7 +8,7 @@ angular.module('hierarchical-selector', [
   'hierarchical-selector.tree-item',
   'hierarchical-selector.selectorUtils'
 ])
-.directive('hierarchicalSelector', function ($compile, selectorUtils) {
+.directive('hierarchicalSelector', ['$compile', 'selectorUtile', function ($compile, selectorUtils) {
   return {
     restrict: 'E',
     replace: true,
@@ -62,7 +62,7 @@ angular.module('hierarchical-selector', [
         });
       }
     },
-    controller: function ($scope, $document, $window, $interpolate) {
+    controller: ['$scope', '$document', '$window', '$interpolate', function ($scope, $document, $window, $interpolate) {
       var activeItem;
 
       $scope.showTree = false;
@@ -335,7 +335,7 @@ angular.module('hierarchical-selector', [
         }
 		    return i.name;
       };
-    }
+    }]
   };
-})
+}])
 ;

@@ -4,7 +4,7 @@
 angular.module('hierarchical-selector.tree-item', [
   'hierarchical-selector.selectorUtils'
 ])
-.directive('treeItem', function($compile, $q, selectorUtils) {
+.directive('treeItem', ['$compile', '$q', function($compile, $q, selectorUtils) {
   return {
     restrict: 'E',
     replace: true,
@@ -23,7 +23,7 @@ angular.module('hierarchical-selector.tree-item', [
       async: '=',
       asyncChildCache: '='
     },
-    controller: function($scope) {
+    controller: ['$scope', function($scope) {
       $scope.metaData = selectorUtils.getMetaData($scope.item);
       $scope.metaData.isExpanded = false;
 
@@ -76,7 +76,7 @@ angular.module('hierarchical-selector.tree-item', [
         }
         return !$scope.selectOnlyLeafs || ($scope.selectOnlyLeafs && !selectorUtils.hasChildren($scope.item, $scope.async));
       };
-    },
+    }],
     /**
     * Manually compiles the element, fixing the recursion loop.
     * @param element
@@ -140,5 +140,5 @@ angular.module('hierarchical-selector.tree-item', [
       };
     }
   };
-})
+}])
 ;

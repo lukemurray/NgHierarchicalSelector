@@ -8,7 +8,7 @@ angular.module('hierarchical-selector', [
   'hierarchical-selector.tree-item',
   'hierarchical-selector.selectorUtils'
 ])
-.directive('hierarchicalSelector', function ($compile, selectorUtils) {
+.directive('hierarchicalSelector', ['$compile', 'selectorUtils', function ($compile, selectorUtils) {
   return {
     restrict: 'E',
     replace: true,
@@ -62,7 +62,7 @@ angular.module('hierarchical-selector', [
         });
       }
     },
-    controller: function ($scope, $document, $window, $interpolate) {
+    controller: ['$scope', '$document', '$window', '$interpolate', function ($scope, $document, $window, $interpolate) {
       var activeItem;
 
       $scope.showTree = false;
@@ -335,16 +335,16 @@ angular.module('hierarchical-selector', [
         }
 		    return i.name;
       };
-    }
+    }]
   };
-})
+}])
 ;
 
 /**
 * Service contianing shared fuctions between the two directives
 */
 angular.module('hierarchical-selector.selectorUtils', [])
-.factory('selectorUtils', function($q) {
+.factory('selectorUtils', ['$q', function($q) {
   return {
     getMetaPath: function() {
       return '_hsmeta'; // change below if you change this
@@ -372,7 +372,7 @@ angular.module('hierarchical-selector.selectorUtils', [])
       return children;
     }
   };
-})
+}])
 ;
 
 /**
@@ -381,7 +381,7 @@ angular.module('hierarchical-selector.selectorUtils', [])
 angular.module('hierarchical-selector.tree-item', [
   'hierarchical-selector.selectorUtils'
 ])
-.directive('treeItem', function($compile, $q, selectorUtils) {
+.directive('treeItem', ['$compile', '$q', 'selectorUtils' function($compile, $q, selectorUtils) {
   return {
     restrict: 'E',
     replace: true,
@@ -400,7 +400,7 @@ angular.module('hierarchical-selector.tree-item', [
       async: '=',
       asyncChildCache: '='
     },
-    controller: function($scope) {
+    controller: ['$scope', function($scope) {
       $scope.metaData = selectorUtils.getMetaData($scope.item);
       $scope.metaData.isExpanded = false;
 
@@ -453,7 +453,7 @@ angular.module('hierarchical-selector.tree-item', [
         }
         return !$scope.selectOnlyLeafs || ($scope.selectOnlyLeafs && !selectorUtils.hasChildren($scope.item, $scope.async));
       };
-    },
+    }],
     /**
     * Manually compiles the element, fixing the recursion loop.
     * @param element
@@ -517,7 +517,7 @@ angular.module('hierarchical-selector.tree-item', [
       };
     }
   };
-})
+}])
 ;
 
 angular.module("hierarchical-selector").run(["$templateCache", function($templateCache) {$templateCache.put("hierarchical-selector.tpl.html","<div class=\"hierarchical-control\">\r\n  <div class=\"control-group\">\r\n    <button type=\"button\" ng-if=\"showButton\" class=\"pull-down\" ng-click=\"onButtonClicked($event)\"><div class=\"arrow-down\"></div></button>\r\n    <div class=\"hierarchical-input form-control\" ng-class=\"{\'with-btn\': showButton}\" ng-click=\"onControlClicked($event)\">\r\n      <span ng-if=\"selectedItems.length == 0\" class=\"placeholder\">{{placeholder}}</span>\r\n      <span ng-if=\"selectedItems.length > 0\" class=\"selected-items\">\r\n        <span ng-repeat=\"i in selectedItems\" class=\"selected-item\">{{getTagName(i)}} <span class=\"selected-item-close\" ng-click=\"deselectItem(i, $event)\"></span></span>\r\n      </span>\r\n      <!-- <input type=\"text\" class=\"blend-in\" /> -->\r\n    </div>\r\n  </div>\r\n  <div class=\"tree-view-outer\" ng-show=\"showTree\">\r\n    <div class=\"tree-view\" ng-show=\"showTree\">\r\n      <ul>\r\n        <tree-item class=\"top-level\" ng-repeat=\"item in data\" item=\"item\" select-only-leafs=\"selectOnlyLeafs\" use-can-select-item=\"useCanSelectItemCallback\" can-select-item=\"canSelectItem\" multi-select=\"multiSelect\" item-selected=\"itemSelected(item)\" on-active-item=\"onActiveItem(item)\" load-child-items=\"loadChildItems\" async=\"isAsync\" item-has-children=\"hasChildren(parent)\" async-child-cache=\"asyncChildCache\" />\r\n      </ul>\r\n    </div>\r\n  </div>\r\n</div>\r\n");
