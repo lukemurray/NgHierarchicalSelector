@@ -2,7 +2,7 @@
 * Service contianing shared fuctions between the two directives
 */
 angular.module('hierarchical-selector.selectorUtils', [])
-.factory('selectorUtils', function($q) {
+.factory('selectorUtils', ['$q', function($q) {
   return {
     getMetaPath: function() {
       return '_hsmeta'; // change below if you change this
@@ -30,5 +30,5 @@ angular.module('hierarchical-selector.selectorUtils', [])
       return children;
     }
   };
-})
+}])
 ;
