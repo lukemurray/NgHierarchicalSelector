@@ -4,7 +4,7 @@
 angular.module('hierarchical-selector.tree-item', [
   'hierarchical-selector.selectorUtils'
 ])
-.directive('treeItem', ['$compile', '$q', function($compile, $q, selectorUtils) {
+.directive('treeItem', ['$compile', '$q', 'selectorUtils', function($compile, $q, selectorUtils) {
   return {
     restrict: 'E',
     replace: true,
