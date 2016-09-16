@@ -115,6 +115,17 @@
 
       <div class="row">
         <div class="col-lg-5 demo-area">
+          <h2>Clear selected items</h2>
+          <p><code>clear-selected</code> - Clears all the selected items when this variable changes</p>
+        </div>
+        <div class="col-lg-7 code">
+          <pre><code class="language-markup">&lt;!-- Clear all the selected items when clearItems variable changes --&gt;
+&lt;hierarchical-selector data="data" multi-select="true" on-selection-changed="onSelectionChanged(items)" clear-selected="clearItems" /&gt;</code></pre>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-5 demo-area">
           <h2>Multi-select leaf selection only</h2>
           <p>Also works in single selection mode.</p>
           <p><code>select-only-leafs</code> - Only nodes that have no children are selectable</p>
